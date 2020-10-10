@@ -178,11 +178,14 @@ export default {
 		this.brands = this.collectBrands;
 	},
 	methods: {
+        // Refresh rendering data
 		refresh() {
 			this.products = this.changeFormatToIDR(shoesJson, this.formatIDR);
 			this.products = this.shuffle(this.products);
 		},
-		shuffle(data) {
+
+        // Shuffle Array Data
+        shuffle(data) {
 			var ctr = data.length,
 				temp,
 				index;
@@ -195,7 +198,9 @@ export default {
 			}
 			return data;
 		},
-		changeFormatToIDR(data, formatIDR) {
+
+        // Change format to IDR -> Not Yet
+        changeFormatToIDR(data, formatIDR) {
 			for (var i in data) {
 				for (var j in formatIDR) {
 					data[i][formatIDR[j]] /= 1;
@@ -208,11 +213,15 @@ export default {
 			}
 			return data;
 		},
-		changeCategory(category = "all") {
+
+        // Change Category Filter -> because radio button
+        changeCategory(category = "all") {
 			this.filter_category = category;
 			this.filteredProduct();
 		},
-		filteredProduct() {
+
+        // Render Filtered Product
+        filteredProduct() {
 			this.refresh();
 			if (this.filter_category != "all") {
 				this.products = this.products.filter(
@@ -234,6 +243,7 @@ export default {
 		},
 	},
 	computed: {
+        // Collect all Unique Categories Name
 		collectCategories() {
 			var category = [];
 			for (var i in this.products) {
@@ -247,7 +257,9 @@ export default {
 			category = category.sort();
 			return category;
 		},
-		collectBrands() {
+
+        // Collect all Unique Brands Name
+        collectBrands() {
 			var brand = [];
 			for (var i in this.products) {
 				brand.push(this.products[i].brand_name);

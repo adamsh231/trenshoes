@@ -94,6 +94,7 @@ export default {
 		this.newProducts = this.filterNew;
 	},
 	methods: {
+        // Shuffle Array Data
 		shuffle(data) {
 			var ctr = data.length,
 				temp,
@@ -107,7 +108,9 @@ export default {
 			}
 			return data;
 		},
-		changeFormatToIDR(data, formatIDR) {
+
+        // Change format to IDR -> Not Yet
+        changeFormatToIDR(data, formatIDR) {
 			for (var i in data) {
 				for (var j in formatIDR) {
                     data[i][formatIDR[j]] /= 1;
@@ -122,13 +125,16 @@ export default {
 		},
 	},
 	computed: {
+        // Filter Hero Produk (Terlaris)
 		filterHero() {
 			let filteredShoes = this.products.filter(
 				(products) => products.most_sold_product_color_id != null
 			);
 			filteredShoes = this.shuffle(filteredShoes).slice(0, this.productLimit);
 			return filteredShoes;
-		},
+        },
+
+        // Filter Produk Terbaru
 		filterNew() {
 			let filteredShoes = this.products.sort(function (a, b) {
 				var dateA = new Date(a.created_at).getTime();
