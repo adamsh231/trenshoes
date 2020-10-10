@@ -48,8 +48,8 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto">
-                            <li class="nav-item @yield('is_home')"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
-                            <li class="nav-item @yield('is_catalogue')"><a class="nav-link" href="index.html">Katalog</a></li>
+                            <li class="nav-item @yield('home')"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
+                            <li class="nav-item @yield('catalogue')"><a class="nav-link" href="{{ url('/catalogue') }}">Katalog</a></li>
                             {{-- <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
                                 <ul class="dropdown-menu">

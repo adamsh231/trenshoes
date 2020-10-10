@@ -1,7 +1,7 @@
 @extends('client.layout.main')
 
 @section('title', 'Home')
-@section('is_home', 'active')
+@section('home', 'active')
 
 @section('add_style')
 {{-- ------------------------Vue Core-------------------------- --}}
@@ -22,7 +22,7 @@
                             <h1>Toko Sepatu<br>Terpercaya!</h1>
                             <p>Marketplace sepatu online, murah dan terpecaya</p>
                             <div class="add-bag d-flex align-items-center">
-                                <a href="#" class="genric-btn primary circle arrow">Katalog<span class="lnr lnr-arrow-right"></span></a>
+                                <a href="{{ url('/catalogue') }}" class="genric-btn primary circle arrow">Katalog<span class="lnr lnr-arrow-right"></span></a>
                             </div>
                         </div>
                     </div>

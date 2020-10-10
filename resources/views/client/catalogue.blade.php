@@ -1,10 +1,22 @@
 @extends('client.layout.main')
 
-@section('title', 'Home')
-@section('is_home', 'active')
+@section('title', 'Katalog')
+@section('catalogue', 'active')
 
 @section('add_style')
 {{-- ------------------------Vue Core-------------------------- --}}
-{{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
+<script src="{{ asset('js/app.js') }}" defer></script>
 {{-- ---------------------------------------------------------- --}}
+@endsection
+
+@section('content')
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+</section>
+<!-- End Banner Area -->
+
+<div id="app">
+    <catalogue-component></catalogue-component>
+</div>
+
 @endsection
