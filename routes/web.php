@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('client.homepage');
 });
+Route::get('/catalogue', function () {
+    return view('client.catalogue');
+});
