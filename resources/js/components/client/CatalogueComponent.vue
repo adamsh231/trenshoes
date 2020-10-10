@@ -10,11 +10,13 @@
 							<ul>
 								<li class="filter-list">
 									<input
-										@change="changeCategory('all')"
+										@change="filteredProduct()"
 										class="pixel-radio"
 										type="radio"
 										id="all"
 										name="brand"
+                                        value="all"
+										v-model="filter_category"
 									/><label for="all">Semua Kategori</label>
 								</li>
 								<li
@@ -23,11 +25,13 @@
 									class="filter-list"
 								>
 									<input
-										@change="changeCategory(category)"
+										@change="filteredProduct()"
 										class="pixel-radio"
 										type="radio"
 										:id="category"
 										name="brand"
+                                        :value="category"
+										v-model="filter_category"
 									/><label :for="category">{{ category }}</label>
 								</li>
 							</ul>
@@ -212,12 +216,6 @@ export default {
 				}
 			}
 			return data;
-		},
-
-        // Change Category Filter -> because radio button
-        changeCategory(category = "all") {
-			this.filter_category = category;
-			this.filteredProduct();
 		},
 
         // Render Filtered Product

@@ -2071,6 +2071,10 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2089,10 +2093,12 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
     this.brands = this.collectBrands;
   },
   methods: {
+    // Refresh rendering data
     refresh: function refresh() {
       this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR);
       this.products = this.shuffle(this.products);
     },
+    // Shuffle Array Data
     shuffle: function shuffle(data) {
       var ctr = data.length,
           temp,
@@ -2108,6 +2114,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 
       return data;
     },
+    // Change format to IDR -> Not Yet
     changeFormatToIDR: function changeFormatToIDR(data, formatIDR) {
       for (var i in data) {
         for (var j in formatIDR) {
@@ -2120,11 +2127,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 
       return data;
     },
-    changeCategory: function changeCategory() {
-      var category = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "all";
-      this.filter_category = category;
-      this.filteredProduct();
-    },
+    // Render Filtered Product
     filteredProduct: function filteredProduct() {
       var _this = this;
 
@@ -2151,6 +2154,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
     }
   },
   computed: {
+    // Collect all Unique Categories Name
     collectCategories: function collectCategories() {
       var category = [];
 
@@ -2166,6 +2170,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       category = category.sort();
       return category;
     },
+    // Collect all Unique Brands Name
     collectBrands: function collectBrands() {
       var brand = [];
 
@@ -2290,6 +2295,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
     this.newProducts = this.filterNew;
   },
   methods: {
+    // Shuffle Array Data
     shuffle: function shuffle(data) {
       var ctr = data.length,
           temp,
@@ -2305,6 +2311,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 
       return data;
     },
+    // Change format to IDR -> Not Yet
     changeFormatToIDR: function changeFormatToIDR(data, formatIDR) {
       for (var i in data) {
         for (var j in formatIDR) {
@@ -2319,6 +2326,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
     }
   },
   computed: {
+    // Filter Hero Produk (Terlaris)
     filterHero: function filterHero() {
       var filteredShoes = this.products.filter(function (products) {
         return products.most_sold_product_color_id != null;
@@ -2326,6 +2334,7 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       filteredShoes = this.shuffle(filteredShoes).slice(0, this.productLimit);
       return filteredShoes;
     },
+    // Filter Produk Terbaru
     filterNew: function filterNew() {
       var filteredShoes = this.products.sort(function (a, b) {
         var dateA = new Date(a.created_at).getTime();
@@ -20004,12 +20013,31 @@ var render = function() {
                 [
                   _c("li", { staticClass: "filter-list" }, [
                     _c("input", {
-                      staticClass: "pixel-radio",
-                      attrs: { type: "radio", id: "all", name: "brand" },
-                      on: {
-                        change: function($event) {
-                          return _vm.changeCategory("all")
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter_category,
+                          expression: "filter_category"
                         }
+                      ],
+                      staticClass: "pixel-radio",
+                      attrs: {
+                        type: "radio",
+                        id: "all",
+                        name: "brand",
+                        value: "all"
+                      },
+                      domProps: { checked: _vm._q(_vm.filter_category, "all") },
+                      on: {
+                        change: [
+                          function($event) {
+                            _vm.filter_category = "all"
+                          },
+                          function($event) {
+                            return _vm.filteredProduct()
+                          }
+                        ]
                       }
                     }),
                     _c("label", { attrs: { for: "all" } }, [
@@ -20023,12 +20051,29 @@ var render = function() {
                       { key: category, staticClass: "filter-list" },
                       [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter_category,
+                              expression: "filter_category"
+                            }
+                          ],
                           staticClass: "pixel-radio",
                           attrs: { type: "radio", id: category, name: "brand" },
+                          domProps: {
+                            value: category,
+                            checked: _vm._q(_vm.filter_category, category)
+                          },
                           on: {
-                            change: function($event) {
-                              return _vm.changeCategory(category)
-                            }
+                            change: [
+                              function($event) {
+                                _vm.filter_category = category
+                              },
+                              function($event) {
+                                return _vm.filteredProduct()
+                              }
+                            ]
                           }
                         }),
                         _c("label", { attrs: { for: category } }, [
