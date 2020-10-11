@@ -24,3 +24,9 @@ Route::get('/product/{id}', function () {
     return view('client.product');
 });
 // ------------------------------------------------------//
+
+// -------------------- Admin Side ----------------------//
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+});
+// ------------------------------------------------------//
