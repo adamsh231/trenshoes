@@ -26,7 +26,7 @@
 								:id="'heroImage' + shoes.id"
 							/>
 							<div class="product-details">
-								<a href="#" class="mb-0">
+								<a :href="url+'/product/'+shoes.id" class="mb-0">
 									<h6>{{ shoes.name }}</h6>
 									<p class="text-black-50">{{ shoes.brand_name }}</p>
 									<div class="price">
@@ -93,7 +93,7 @@
 								:id="'newImage' + shoes.id"
 							/>
 							<div class="product-details">
-								<a href="#" class="mb-0">
+								<a :href="url+'/product/'+shoes.id" class="mb-0">
 									<h6>{{ shoes.name }}</h6>
 									<p class="text-black-50">{{ shoes.brand_name }}</p>
 									<div class="price">
@@ -140,6 +140,7 @@ import shoesJson from "../json/products.json";
 export default {
 	data() {
 		return {
+            url: window.location.origin,
 			products: [],
 			heroProducts: [],
 			newProducts: [],

@@ -13,9 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// -------------------- Client Side ----------------------//
 Route::get('/', function () {
     return view('client.homepage');
 });
 Route::get('/catalogue', function () {
     return view('client.catalogue');
 });
+Route::get('/product/{id}', function () {
+    return view('client.product');
+});
+// ------------------------------------------------------//
