@@ -114,23 +114,21 @@
 					</div>
 					<!-- ----- -->
 
-                    <!-- Price -->
+					<!-- Price -->
 					<div class="common-filter">
-						<div class="head">Price</div>
+						<div class="head">Harga</div>
 						<div class="price-range-area">
 							<div id="price-range"></div>
-							<div class="value-wrapper d-flex">
-								<div class="price">Price:</div>
-								<span>$</span>
-								<div id="lower-value"></div>
-								<div class="to">to</div>
-								<span>$</span>
-								<div id="upper-value"></div>
+							<div class="value-wrapper d-flex justify-content-center">
+								<span class="text-dark">Rp &nbsp</span>
+								<div id="lower-value" class="text-danger"></div>
+								<div class="to">-</div>
+								<span></span>
+								<div id="upper-value" class="text-primary"></div>
 							</div>
 						</div>
 					</div>
-                    <!-- ----- -->
-
+					<!-- ----- -->
 				</div>
 			</div>
 			<!-- ------ -->
@@ -170,10 +168,12 @@
 										<h6>{{ shoes.name }}</h6>
 										<p class="text-black-50">{{ shoes.brand_name }}</p>
 										<div class="price">
-											<small class="l-through text-right"
+											<small
+												v-if="shoes.final_price == shoes.promo_price"
+												class="l-through text-right"
 												>Rp {{ shoes.price }}</small
 											>
-											<p class="text-right">Rp {{ shoes.promo_price }}</p>
+											<p class="text-right">Rp {{ shoes.final_price }}</p>
 										</div>
 									</a>
 									<hr />
@@ -234,6 +234,7 @@ export default {
 			filter_brand: [],
 			filter_size: [],
 			filter_name: "",
+			filter_price: [],
 		};
 	},
 	created() {
@@ -243,11 +244,55 @@ export default {
 		this.sizes = this.collectSizes;
 		this.colors = this.collectColor;
 	},
+	mounted() {
+		//----- Library No UI Slider for Price Range --------//
+		const vm = this;
+		$(function () {
+			if (document.getElementById("price-range")) {
+				var nonLinearSlider = document.getElementById("price-range");
+
+				noUiSlider.create(nonLinearSlider, {
+					connect: true,
+					behaviour: "tap",
+					start: [0, 300000],
+					range: {
+						// Starting at 500, step the value by 500,
+						// until 4000 is reached. From there, step by 1000.
+						min: [0],
+						"10%": [1000, 1000],
+						"50%": [10000, 5000],
+						max: [300000],
+					},
+				});
+
+				var nodes = [
+					document.getElementById("lower-value"), // 0
+					document.getElementById("upper-value"), // 1
+				];
+
+				// Display the slider value and how far the handle moved
+				// from the left edge of the slider.
+				nonLinearSlider.noUiSlider.on("update", function (
+					values,
+					handle,
+					unencoded,
+					isTap,
+					positions
+				) {
+					nodes[handle].innerHTML = (values[handle] / 1)
+						.toString()
+						.replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
+					vm.filter_price[handle] = values[handle] / 1;
+					vm.filteredProduct();
+				});
+			}
+		});
+	},
 	methods: {
 		// Refresh rendering data
 		refresh() {
 			this.products = this.changeFormatToIDR(shoesJson, this.formatIDR);
-			this.products = this.shuffle(this.products);
+			// this.products = this.shuffle(this.products);
 		},
 
 		// Shuffle Array Data
@@ -357,6 +402,13 @@ export default {
 				}
 				this.products = this.removeDuplicates(arr_concat, "id");
 			}
+
+			// Price Filter
+			this.products = this.products.filter(
+				(product) =>
+					product.final_price >= this.filter_price[0] &&
+					product.final_price <= this.filter_price[1]
+			);
 		},
 
 		// Change image with another color

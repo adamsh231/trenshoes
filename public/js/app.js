@@ -2144,7 +2144,8 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       filter_color: [],
       filter_brand: [],
       filter_size: [],
-      filter_name: ""
+      filter_name: "",
+      filter_price: []
     };
   },
   created: function created() {
@@ -2154,11 +2155,42 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
     this.sizes = this.collectSizes;
     this.colors = this.collectColor;
   },
+  mounted: function mounted() {
+    //----- Library No UI Slider for Price Range --------//
+    var vm = this;
+    $(function () {
+      if (document.getElementById("price-range")) {
+        var nonLinearSlider = document.getElementById("price-range");
+        noUiSlider.create(nonLinearSlider, {
+          connect: true,
+          behaviour: "tap",
+          start: [0, 300000],
+          range: {
+            // Starting at 500, step the value by 500,
+            // until 4000 is reached. From there, step by 1000.
+            min: [0],
+            "10%": [1000, 1000],
+            "50%": [10000, 5000],
+            max: [300000]
+          }
+        });
+        var nodes = [document.getElementById("lower-value"), // 0
+        document.getElementById("upper-value") // 1
+        ]; // Display the slider value and how far the handle moved
+        // from the left edge of the slider.
+
+        nonLinearSlider.noUiSlider.on("update", function (values, handle, unencoded, isTap, positions) {
+          nodes[handle].innerHTML = (values[handle] / 1).toString().replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1.");
+          vm.filter_price[handle] = values[handle] / 1;
+          vm.filteredProduct();
+        });
+      }
+    });
+  },
   methods: {
     // Refresh rendering data
     refresh: function refresh() {
-      this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR);
-      this.products = this.shuffle(this.products);
+      this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR); // this.products = this.shuffle(this.products);
     },
     // Shuffle Array Data
     shuffle: function shuffle(data) {
@@ -2273,7 +2305,12 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
         }
 
         this.products = this.removeDuplicates(arr_concat, "id");
-      }
+      } // Price Filter
+
+
+      this.products = this.products.filter(function (product) {
+        return product.final_price >= _this.filter_price[0] && product.final_price <= _this.filter_price[1];
+      });
     },
     // Change image with another color
     changeImage: function changeImage(id, src) {
@@ -20601,14 +20638,16 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("div", { staticClass: "price" }, [
-                                _c(
-                                  "small",
-                                  { staticClass: "l-through text-right" },
-                                  [_vm._v("Rp " + _vm._s(shoes.price))]
-                                ),
+                                shoes.final_price == shoes.promo_price
+                                  ? _c(
+                                      "small",
+                                      { staticClass: "l-through text-right" },
+                                      [_vm._v("Rp " + _vm._s(shoes.price))]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
                                 _c("p", { staticClass: "text-right" }, [
-                                  _vm._v("Rp " + _vm._s(shoes.promo_price))
+                                  _vm._v("Rp " + _vm._s(shoes.final_price))
                                 ])
                               ])
                             ]
@@ -20643,9 +20682,9 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                      "\n\t\t\t\t\t\t\t\t\t\t" +
                                         _vm._s(color.color.name) +
-                                        "\n\t\t\t\t\t\t\t\t\t\t"
+                                        "\n\t\t\t\t\t\t\t\t\t"
                                     )
                                   ]
                                 )
@@ -20675,24 +20714,32 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "common-filter" }, [
-      _c("div", { staticClass: "head" }, [_vm._v("Price")]),
+      _c("div", { staticClass: "head" }, [_vm._v("Harga")]),
       _vm._v(" "),
       _c("div", { staticClass: "price-range-area" }, [
         _c("div", { attrs: { id: "price-range" } }),
         _vm._v(" "),
-        _c("div", { staticClass: "value-wrapper d-flex" }, [
-          _c("div", { staticClass: "price" }, [_vm._v("Price:")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("$")]),
-          _vm._v(" "),
-          _c("div", { attrs: { id: "lower-value" } }),
-          _vm._v(" "),
-          _c("div", { staticClass: "to" }, [_vm._v("to")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("$")]),
-          _vm._v(" "),
-          _c("div", { attrs: { id: "upper-value" } })
-        ])
+        _c(
+          "div",
+          { staticClass: "value-wrapper d-flex justify-content-center" },
+          [
+            _c("span", { staticClass: "text-dark" }, [_vm._v("Rp  ")]),
+            _vm._v(" "),
+            _c("div", {
+              staticClass: "text-danger",
+              attrs: { id: "lower-value" }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "to" }, [_vm._v("-")]),
+            _vm._v(" "),
+            _c("span"),
+            _vm._v(" "),
+            _c("div", {
+              staticClass: "text-primary",
+              attrs: { id: "upper-value" }
+            })
+          ]
+        )
       ])
     ])
   },
@@ -20777,7 +20824,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("p", { staticClass: "text-right" }, [
-                            _vm._v("Rp " + _vm._s(shoes.promo_price))
+                            _vm._v("Rp " + _vm._s(shoes.final_price))
                           ])
                         ])
                       ]),
@@ -20801,13 +20848,13 @@ var render = function() {
                           },
                           [
                             _c(
-                              "span",
+                              "button",
                               {
                                 staticClass: "btn-sm btn-outline-light",
                                 style:
                                   "background-color:" +
                                   color.color.rgb +
-                                  "; border-radius: 15px; border: 1px solid black"
+                                  "; border-radius: 15px; border: 1px solid black; cursor: pointer"
                               },
                               [_vm._v(_vm._s(color.color.name))]
                             )
@@ -20867,7 +20914,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("p", { staticClass: "text-right" }, [
-                            _vm._v("Rp " + _vm._s(shoes.promo_price))
+                            _vm._v("Rp " + _vm._s(shoes.final_price))
                           ])
                         ])
                       ]),
@@ -20891,13 +20938,13 @@ var render = function() {
                           },
                           [
                             _c(
-                              "span",
+                              "button",
                               {
                                 staticClass: "btn-sm btn-outline-light",
                                 style:
                                   "background-color:" +
                                   color.color.rgb +
-                                  "; border-radius: 15px; border: 1px solid black"
+                                  "; border-radius: 15px; border: 1px solid black; cursor: pointer"
                               },
                               [_vm._v(_vm._s(color.color.name))]
                             )

@@ -33,7 +33,7 @@
 										<small class="l-through text-right"
 											>Rp {{ shoes.price }}</small
 										>
-										<p class="text-right">Rp {{ shoes.promo_price }}</p>
+										<p class="text-right">Rp {{ shoes.final_price }}</p>
 									</div>
 								</a>
 								<hr />
@@ -45,14 +45,14 @@
 										changeImage('image' + shoes.id, color.thumbnail_urls[0])
 									"
 								>
-									<span
+									<button
 										class="btn-sm btn-outline-light"
 										:style="
 											'background-color:' +
 											color.color.rgb +
-											'; border-radius: 15px; border: 1px solid black'
+											'; border-radius: 15px; border: 1px solid black; cursor: pointer'
 										"
-										>{{ color.color.name }}</span
+										>{{ color.color.name }}</button
 									>
 								</p>
 							</div>
@@ -97,7 +97,7 @@
 										<small class="l-through text-right"
 											>Rp {{ shoes.price }}</small
 										>
-										<p class="text-right">Rp {{ shoes.promo_price }}</p>
+										<p class="text-right">Rp {{ shoes.final_price }}</p>
 									</div>
 								</a>
 								<hr />
@@ -109,14 +109,14 @@
 										changeImage('image' + shoes.id, color.thumbnail_urls[0])
 									"
 								>
-									<span
+									<button
 										class="btn-sm btn-outline-light"
 										:style="
 											'background-color:' +
 											color.color.rgb +
-											'; border-radius: 15px; border: 1px solid black'
+											'; border-radius: 15px; border: 1px solid black; cursor: pointer'
 										"
-										>{{ color.color.name }}</span
+										>{{ color.color.name }}</button
 									>
 								</p>
 							</div>
