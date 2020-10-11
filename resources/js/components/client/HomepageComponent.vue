@@ -23,14 +23,16 @@
 								class="img-fluid"
 								:src="shoes.image_url"
 								alt=""
-								:id="'image' + shoes.id"
+								:id="'heroImage' + shoes.id"
 							/>
 							<div class="product-details">
 								<a href="#" class="mb-0">
 									<h6>{{ shoes.name }}</h6>
 									<p class="text-black-50">{{ shoes.brand_name }}</p>
 									<div class="price">
-										<small class="l-through text-right"
+										<small
+											class="l-through text-right"
+											v-if="shoes.final_price == shoes.promo_price"
 											>Rp {{ shoes.price }}</small
 										>
 										<p class="text-right">Rp {{ shoes.final_price }}</p>
@@ -42,7 +44,7 @@
 									:key="color.id"
 									class="d-inline"
 									@click="
-										changeImage('image' + shoes.id, color.thumbnail_urls[0])
+										changeImage('heroImage' + shoes.id, color.thumbnail_urls[0])
 									"
 								>
 									<button
@@ -52,8 +54,9 @@
 											color.color.rgb +
 											'; border-radius: 15px; border: 1px solid black; cursor: pointer'
 										"
-										>{{ color.color.name }}</button
 									>
+										{{ color.color.name }}
+									</button>
 								</p>
 							</div>
 						</div>
@@ -87,14 +90,16 @@
 								class="img-fluid"
 								:src="shoes.image_url"
 								alt=""
-								:id="'image' + shoes.id"
+								:id="'newImage' + shoes.id"
 							/>
 							<div class="product-details">
 								<a href="#" class="mb-0">
 									<h6>{{ shoes.name }}</h6>
 									<p class="text-black-50">{{ shoes.brand_name }}</p>
 									<div class="price">
-										<small class="l-through text-right"
+										<small
+											class="l-through text-right"
+											v-if="shoes.final_price == shoes.promo_price"
 											>Rp {{ shoes.price }}</small
 										>
 										<p class="text-right">Rp {{ shoes.final_price }}</p>
@@ -106,7 +111,7 @@
 									:key="color.id"
 									class="d-inline"
 									@click="
-										changeImage('image' + shoes.id, color.thumbnail_urls[0])
+										changeImage('newImage' + shoes.id, color.thumbnail_urls[0])
 									"
 								>
 									<button
@@ -116,8 +121,9 @@
 											color.color.rgb +
 											'; border-radius: 15px; border: 1px solid black; cursor: pointer'
 										"
-										>{{ color.color.name }}</button
 									>
+										{{ color.color.name }}
+									</button>
 								</p>
 							</div>
 						</div>

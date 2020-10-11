@@ -120,11 +120,11 @@
 						<div class="price-range-area">
 							<div id="price-range"></div>
 							<div class="value-wrapper d-flex justify-content-center">
-								<span class="text-dark">Rp &nbsp</span>
+								<span class="text-dark">Rp (</span>
 								<div id="lower-value" class="text-danger"></div>
-								<div class="to">-</div>
-								<span></span>
+								<div class="to text-dark">-</div>
 								<div id="upper-value" class="text-primary"></div>
+								<span class="text-dark">)</span>
 							</div>
 						</div>
 					</div>

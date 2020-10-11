@@ -2538,6 +2538,12 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -20723,21 +20729,21 @@ var staticRenderFns = [
           "div",
           { staticClass: "value-wrapper d-flex justify-content-center" },
           [
-            _c("span", { staticClass: "text-dark" }, [_vm._v("Rp  ")]),
+            _c("span", { staticClass: "text-dark" }, [_vm._v("Rp (")]),
             _vm._v(" "),
             _c("div", {
               staticClass: "text-danger",
               attrs: { id: "lower-value" }
             }),
             _vm._v(" "),
-            _c("div", { staticClass: "to" }, [_vm._v("-")]),
-            _vm._v(" "),
-            _c("span"),
+            _c("div", { staticClass: "to text-dark" }, [_vm._v("-")]),
             _vm._v(" "),
             _c("div", {
               staticClass: "text-primary",
               attrs: { id: "upper-value" }
-            })
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "text-dark" }, [_vm._v(")")])
           ]
         )
       ])
@@ -20803,7 +20809,7 @@ var render = function() {
                     attrs: {
                       src: shoes.image_url,
                       alt: "",
-                      id: "image" + shoes.id
+                      id: "heroImage" + shoes.id
                     }
                   }),
                   _vm._v(" "),
@@ -20819,9 +20825,13 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "price" }, [
-                          _c("small", { staticClass: "l-through text-right" }, [
-                            _vm._v("Rp " + _vm._s(shoes.price))
-                          ]),
+                          shoes.final_price == shoes.promo_price
+                            ? _c(
+                                "small",
+                                { staticClass: "l-through text-right" },
+                                [_vm._v("Rp " + _vm._s(shoes.price))]
+                              )
+                            : _vm._e(),
                           _vm._v(" "),
                           _c("p", { staticClass: "text-right" }, [
                             _vm._v("Rp " + _vm._s(shoes.final_price))
@@ -20840,7 +20850,7 @@ var render = function() {
                             on: {
                               click: function($event) {
                                 return _vm.changeImage(
-                                  "image" + shoes.id,
+                                  "heroImage" + shoes.id,
                                   color.thumbnail_urls[0]
                                 )
                               }
@@ -20856,7 +20866,13 @@ var render = function() {
                                   color.color.rgb +
                                   "; border-radius: 15px; border: 1px solid black; cursor: pointer"
                               },
-                              [_vm._v(_vm._s(color.color.name))]
+                              [
+                                _vm._v(
+                                  "\n\t\t\t\t\t\t\t\t\t" +
+                                    _vm._s(color.color.name) +
+                                    "\n\t\t\t\t\t\t\t\t"
+                                )
+                              ]
                             )
                           ]
                         )
@@ -20893,7 +20909,7 @@ var render = function() {
                     attrs: {
                       src: shoes.image_url,
                       alt: "",
-                      id: "image" + shoes.id
+                      id: "newImage" + shoes.id
                     }
                   }),
                   _vm._v(" "),
@@ -20909,9 +20925,13 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "price" }, [
-                          _c("small", { staticClass: "l-through text-right" }, [
-                            _vm._v("Rp " + _vm._s(shoes.price))
-                          ]),
+                          shoes.final_price == shoes.promo_price
+                            ? _c(
+                                "small",
+                                { staticClass: "l-through text-right" },
+                                [_vm._v("Rp " + _vm._s(shoes.price))]
+                              )
+                            : _vm._e(),
                           _vm._v(" "),
                           _c("p", { staticClass: "text-right" }, [
                             _vm._v("Rp " + _vm._s(shoes.final_price))
@@ -20930,7 +20950,7 @@ var render = function() {
                             on: {
                               click: function($event) {
                                 return _vm.changeImage(
-                                  "image" + shoes.id,
+                                  "newImage" + shoes.id,
                                   color.thumbnail_urls[0]
                                 )
                               }
@@ -20946,7 +20966,13 @@ var render = function() {
                                   color.color.rgb +
                                   "; border-radius: 15px; border: 1px solid black; cursor: pointer"
                               },
-                              [_vm._v(_vm._s(color.color.name))]
+                              [
+                                _vm._v(
+                                  "\n\t\t\t\t\t\t\t\t\t" +
+                                    _vm._s(color.color.name) +
+                                    "\n\t\t\t\t\t\t\t\t"
+                                )
+                              ]
                             )
                           ]
                         )
