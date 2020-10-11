@@ -2100,6 +2100,36 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2127,7 +2157,8 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
   methods: {
     // Refresh rendering data
     refresh: function refresh() {
-      this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR); // this.products = this.shuffle(this.products);
+      this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR);
+      this.products = this.shuffle(this.products);
     },
     // Shuffle Array Data
     shuffle: function shuffle(data) {
@@ -2243,6 +2274,10 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 
         this.products = this.removeDuplicates(arr_concat, "id");
       }
+    },
+    // Change image with another color
+    changeImage: function changeImage(id, src) {
+      $("#" + id).attr("src", src);
     }
   },
   computed: {
@@ -2420,6 +2455,52 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2465,6 +2546,10 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       }
 
       return data;
+    },
+    // Change image with another color
+    changeImage: function changeImage(id, src) {
+      $("#" + id).attr("src", src);
     }
   },
   computed: {
@@ -20491,33 +20576,85 @@ var render = function() {
                   "div",
                   { key: shoes.id, staticClass: "col-lg-4 col-md-6" },
                   [
-                    _c("a", { attrs: { href: "#" } }, [
-                      _c("div", { staticClass: "single-product" }, [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: shoes.image_url, alt: "" }
-                        }),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "product-details" }, [
-                          _c("h6", [_vm._v(_vm._s(shoes.name))]),
+                    _c("div", { staticClass: "single-product" }, [
+                      _c("img", {
+                        staticClass: "img-fluid",
+                        attrs: {
+                          src: shoes.image_url,
+                          alt: "",
+                          id: "image" + shoes.id
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "product-details" },
+                        [
+                          _c(
+                            "a",
+                            { staticClass: "mb-0", attrs: { href: "#" } },
+                            [
+                              _c("h6", [_vm._v(_vm._s(shoes.name))]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "text-black-50" }, [
+                                _vm._v(_vm._s(shoes.brand_name))
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "price" }, [
+                                _c(
+                                  "small",
+                                  { staticClass: "l-through text-right" },
+                                  [_vm._v("Rp " + _vm._s(shoes.price))]
+                                ),
+                                _vm._v(" "),
+                                _c("p", { staticClass: "text-right" }, [
+                                  _vm._v("Rp " + _vm._s(shoes.promo_price))
+                                ])
+                              ])
+                            ]
+                          ),
                           _vm._v(" "),
-                          _c("p", { staticClass: "text-black-50" }, [
-                            _vm._v(_vm._s(shoes.brand_name))
-                          ]),
+                          _c("hr"),
                           _vm._v(" "),
-                          _c("div", { staticClass: "price" }, [
-                            _c(
-                              "small",
-                              { staticClass: "l-through text-right" },
-                              [_vm._v("Rp " + _vm._s(shoes.price))]
-                            ),
-                            _vm._v(" "),
-                            _c("p", { staticClass: "text-right" }, [
-                              _vm._v("Rp " + _vm._s(shoes.promo_price))
-                            ])
-                          ])
-                        ])
-                      ])
+                          _vm._l(shoes.variants, function(color) {
+                            return _c(
+                              "p",
+                              {
+                                key: color.id,
+                                staticClass: "d-inline",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.changeImage(
+                                      "image" + shoes.id,
+                                      color.thumbnail_urls[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn-sm btn-outline-light",
+                                    style:
+                                      "background-color:" +
+                                      color.color.rgb +
+                                      "; border-radius: 15px; border: 1px solid black; cursor: pointer"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n\t\t\t\t\t\t\t\t\t\t\t" +
+                                        _vm._s(color.color.name) +
+                                        "\n\t\t\t\t\t\t\t\t\t\t"
+                                    )
+                                  ]
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      )
                     ])
                   ]
                 )
@@ -20613,29 +20750,73 @@ var render = function() {
               "div",
               { key: shoes.id, staticClass: "col-lg-3 col-md-6" },
               [
-                _c("a", { attrs: { href: "#" } }, [
-                  _c("div", { staticClass: "single-product" }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: shoes.image_url, alt: "" }
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "product-details" }, [
-                      _c("h6", [_vm._v(_vm._s(shoes.name))]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-black-50" }, [
-                        _vm._v(_vm._s(shoes.brand_name))
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "price text-right" }, [
-                        _c("p", { staticClass: "l-through text-right" }, [
-                          _vm._v("Rp " + _vm._s(shoes.price))
+                _c("div", { staticClass: "single-product" }, [
+                  _c("img", {
+                    staticClass: "img-fluid",
+                    attrs: {
+                      src: shoes.image_url,
+                      alt: "",
+                      id: "image" + shoes.id
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "product-details" },
+                    [
+                      _c("a", { staticClass: "mb-0", attrs: { href: "#" } }, [
+                        _c("h6", [_vm._v(_vm._s(shoes.name))]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "text-black-50" }, [
+                          _vm._v(_vm._s(shoes.brand_name))
                         ]),
                         _vm._v(" "),
-                        _c("p", [_vm._v("Rp " + _vm._s(shoes.promo_price))])
-                      ])
-                    ])
-                  ])
+                        _c("div", { staticClass: "price" }, [
+                          _c("small", { staticClass: "l-through text-right" }, [
+                            _vm._v("Rp " + _vm._s(shoes.price))
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "text-right" }, [
+                            _vm._v("Rp " + _vm._s(shoes.promo_price))
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._l(shoes.variants, function(color) {
+                        return _c(
+                          "p",
+                          {
+                            key: color.id,
+                            staticClass: "d-inline",
+                            on: {
+                              click: function($event) {
+                                return _vm.changeImage(
+                                  "image" + shoes.id,
+                                  color.thumbnail_urls[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "span",
+                              {
+                                staticClass: "btn-sm btn-outline-light",
+                                style:
+                                  "background-color:" +
+                                  color.color.rgb +
+                                  "; border-radius: 15px; border: 1px solid black"
+                              },
+                              [_vm._v(_vm._s(color.color.name))]
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
                 ])
               ]
             )
@@ -20659,31 +20840,73 @@ var render = function() {
               "div",
               { key: shoes.id, staticClass: "col-lg-3 col-md-6" },
               [
-                _c("a", { attrs: { href: "#" } }, [
-                  _c("div", { staticClass: "single-product" }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: shoes.image_url, alt: "" }
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "product-details" }, [
-                      _c("h6", [_vm._v(_vm._s(shoes.name))]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-black-50" }, [
-                        _vm._v(_vm._s(shoes.brand_name))
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "price" }, [
-                        _c("p", { staticClass: "l-through text-right" }, [
-                          _vm._v("Rp " + _vm._s(shoes.price))
+                _c("div", { staticClass: "single-product" }, [
+                  _c("img", {
+                    staticClass: "img-fluid",
+                    attrs: {
+                      src: shoes.image_url,
+                      alt: "",
+                      id: "image" + shoes.id
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "product-details" },
+                    [
+                      _c("a", { staticClass: "mb-0", attrs: { href: "#" } }, [
+                        _c("h6", [_vm._v(_vm._s(shoes.name))]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "text-black-50" }, [
+                          _vm._v(_vm._s(shoes.brand_name))
                         ]),
                         _vm._v(" "),
-                        _c("p", { staticClass: "text-right" }, [
-                          _vm._v("Rp " + _vm._s(shoes.promo_price))
+                        _c("div", { staticClass: "price" }, [
+                          _c("small", { staticClass: "l-through text-right" }, [
+                            _vm._v("Rp " + _vm._s(shoes.price))
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "text-right" }, [
+                            _vm._v("Rp " + _vm._s(shoes.promo_price))
+                          ])
                         ])
-                      ])
-                    ])
-                  ])
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._l(shoes.variants, function(color) {
+                        return _c(
+                          "p",
+                          {
+                            key: color.id,
+                            staticClass: "d-inline",
+                            on: {
+                              click: function($event) {
+                                return _vm.changeImage(
+                                  "image" + shoes.id,
+                                  color.thumbnail_urls[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "span",
+                              {
+                                staticClass: "btn-sm btn-outline-light",
+                                style:
+                                  "background-color:" +
+                                  color.color.rgb +
+                                  "; border-radius: 15px; border: 1px solid black"
+                              },
+                              [_vm._v(_vm._s(color.color.name))]
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
                 ])
               ]
             )

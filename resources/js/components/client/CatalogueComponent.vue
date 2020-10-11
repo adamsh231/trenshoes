@@ -112,8 +112,9 @@
 							</form>
 						</div>
 					</div>
-					<!-- ---- -->
+					<!-- ----- -->
 
+                    <!-- Price -->
 					<div class="common-filter">
 						<div class="head">Price</div>
 						<div class="price-range-area">
@@ -128,6 +129,8 @@
 							</div>
 						</div>
 					</div>
+                    <!-- ----- -->
+
 				</div>
 			</div>
 			<!-- ------ -->
@@ -155,19 +158,46 @@
 							:key="shoes.id"
 							class="col-lg-4 col-md-6"
 						>
-							<a href="#">
-								<div class="single-product">
-									<img class="img-fluid" :src="shoes.image_url" alt="" />
-									<div class="product-details">
+							<div class="single-product">
+								<img
+									class="img-fluid"
+									:src="shoes.image_url"
+									alt=""
+									:id="'image' + shoes.id"
+								/>
+								<div class="product-details">
+									<a href="#" class="mb-0">
 										<h6>{{ shoes.name }}</h6>
 										<p class="text-black-50">{{ shoes.brand_name }}</p>
 										<div class="price">
-											<small class="l-through text-right">Rp {{ shoes.price }}</small>
+											<small class="l-through text-right"
+												>Rp {{ shoes.price }}</small
+											>
 											<p class="text-right">Rp {{ shoes.promo_price }}</p>
 										</div>
-									</div>
+									</a>
+									<hr />
+									<p
+										v-for="color in shoes.variants"
+										:key="color.id"
+										class="d-inline"
+										@click="
+											changeImage('image' + shoes.id, color.thumbnail_urls[0])
+										"
+									>
+										<button
+											class="btn-sm btn-outline-light"
+											:style="
+												'background-color:' +
+												color.color.rgb +
+												'; border-radius: 15px; border: 1px solid black; cursor: pointer'
+											"
+										>
+											{{ color.color.name }}
+										</button>
+									</p>
 								</div>
-							</a>
+							</div>
 						</div>
 					</div>
 				</section>
@@ -217,7 +247,7 @@ export default {
 		// Refresh rendering data
 		refresh() {
 			this.products = this.changeFormatToIDR(shoesJson, this.formatIDR);
-			// this.products = this.shuffle(this.products);
+			this.products = this.shuffle(this.products);
 		},
 
 		// Shuffle Array Data
@@ -322,12 +352,16 @@ export default {
 						product.variants.some(
 							({ color_id }) => color_id == this.filter_color[i]
 						)
-                    );
+					);
 					arr_concat = arr_concat.concat(concat);
-                }
+				}
 				this.products = this.removeDuplicates(arr_concat, "id");
-            }
+			}
+		},
 
+		// Change image with another color
+		changeImage(id, src) {
+			$("#" + id).attr("src", src);
 		},
 	},
 	computed: {
