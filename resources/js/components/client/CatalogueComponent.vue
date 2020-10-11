@@ -1,110 +1,119 @@
 <template>
 	<div class="container mt-4">
 		<div class="row">
+			<!-- Filter -->
 			<div class="col-xl-3 col-lg-4 col-md-5">
 				<div class="sidebar-filter mt-50">
 					<div class="top-filter-head">Filter Produk</div>
+
+					<!-- Kategori -->
 					<div class="common-filter">
 						<div class="head">Kategori</div>
-						<form action="#">
-							<ul>
-								<li class="filter-list">
-									<input
-										@change="filteredProduct()"
-										class="pixel-radio"
-										type="radio"
-										id="all"
-										name="brand"
-                                        value="all"
-										v-model="filter_category"
-									/><label for="all">Semua Kategori</label>
-								</li>
-								<li
-									v-for="category in categories"
-									:key="category"
-									class="filter-list"
-								>
-									<input
-										@change="filteredProduct()"
-										class="pixel-radio"
-										type="radio"
-										:id="category"
-										name="brand"
-                                        :value="category"
-										v-model="filter_category"
-									/><label :for="category">{{ category }}</label>
-								</li>
-							</ul>
-						</form>
-					</div>
-					<div class="common-filter">
-						<div class="head">Brands</div>
-						<form action="#">
-							<ul>
-								<li v-for="brand in brands" :key="brand" class="filter-list">
-									<input
-										class="pixel-radio"
-										type="checkbox"
-										:id="brand"
-										:value="brand"
-										v-model="filter_brand"
-										@change="filteredProduct()"
-									/><label :for="brand">{{ brand }}</label>
-								</li>
-							</ul>
-						</form>
-					</div>
-					<div class="common-filter">
-						<div class="head">Color</div>
-						<form action="#">
-							<ul>
-								<li class="filter-list">
-									<input
-										class="pixel-radio"
-										type="radio"
-										id="black"
-										name="color"
-									/><label for="black">Black<span>(29)</span></label>
-								</li>
-								<li class="filter-list">
-									<input
-										class="pixel-radio"
-										type="radio"
-										id="balckleather"
-										name="color"
-									/><label for="balckleather"
-										>Black Leather<span>(29)</span></label
+						<div style="overflow: auto; height: 200px">
+							<form action="#">
+								<ul>
+									<li
+										v-for="category in categories"
+										:key="category"
+										class="filter-list"
 									>
-								</li>
-								<li class="filter-list">
-									<input
-										class="pixel-radio"
-										type="radio"
-										id="blackred"
-										name="color"
-									/><label for="blackred"
-										>Black with red<span>(19)</span></label
-									>
-								</li>
-								<li class="filter-list">
-									<input
-										class="pixel-radio"
-										type="radio"
-										id="gold"
-										name="color"
-									/><label for="gold">Gold<span>(19)</span></label>
-								</li>
-								<li class="filter-list">
-									<input
-										class="pixel-radio"
-										type="radio"
-										id="spacegrey"
-										name="color"
-									/><label for="spacegrey">Spacegrey<span>(19)</span></label>
-								</li>
-							</ul>
-						</form>
+										<input
+											@change="filteredProduct()"
+											class="pixel-radio"
+											type="checkbox"
+											:id="category"
+											name="category"
+											:value="category"
+											v-model="filter_category"
+										/><label :for="category">{{ category }}</label>
+									</li>
+								</ul>
+							</form>
+						</div>
 					</div>
+					<!-- -------- -->
+
+					<!-- Brand -->
+					<div class="common-filter">
+						<div class="head">Merek</div>
+						<div style="overflow: auto; height: 200px">
+							<form action="#">
+								<ul>
+									<li v-for="brand in brands" :key="brand" class="filter-list">
+										<input
+											class="pixel-radio"
+											type="checkbox"
+											:id="brand"
+											:value="brand"
+											v-model="filter_brand"
+											@change="filteredProduct()"
+										/><label :for="brand">{{ brand }}</label>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+					<!-- ----- -->
+
+					<!-- Size -->
+					<div class="common-filter">
+						<div class="head">Ukuran</div>
+						<div style="overflow: auto; height: 200px">
+							<form action="#">
+								<ul>
+									<li v-for="size in sizes" :key="size" class="filter-list">
+										<input
+											class="pixel-radio"
+											type="checkbox"
+											:id="size"
+											:value="size"
+											v-model="filter_size"
+											@change="filteredProduct()"
+										/><label :for="size">{{ size }}</label>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+					<!-- ----- -->
+
+					<!-- Color -->
+					<div class="common-filter">
+						<div class="head">Warna</div>
+						<div style="overflow: auto; height: 200px">
+							<form action="#">
+								<ul>
+									<li
+										v-for="color in colors"
+										:key="color.id"
+										class="filter-list"
+									>
+										<input
+											@change="filteredProduct()"
+											class="pixel-radio"
+											type="checkbox"
+											:id="color.id"
+											name="color"
+											:value="color.id"
+											v-model="filter_color"
+										/><label :for="color.id">
+											<span
+												class="btn-sm btn-outline-light"
+												:style="
+													'background-color:' +
+													color.rgb +
+													'; border-radius: 15px; border: 1px solid black'
+												"
+												>{{ color.name }}</span
+											>
+										</label>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+					<!-- ---- -->
+
 					<div class="common-filter">
 						<div class="head">Price</div>
 						<div class="price-range-area">
@@ -121,12 +130,26 @@
 					</div>
 				</div>
 			</div>
+			<!-- ------ -->
 
+			<!-- Produk -->
 			<div class="col-xl-9 col-lg-8 col-md-7">
-				<!-- Start Best Seller -->
+				<div class="input-group" style="margin-top: 50px">
+					<input
+						type="text"
+						class="form-control text-center"
+						placeholder="Cari Nama Produk"
+						onfocus="this.placeholder = ''"
+						onblur="this.placeholder = 'Cari Nama Produk'"
+						v-model="filter_name"
+						@input="filteredProduct()"
+					/>
+				</div>
+
+				<!-- produk -->
 				<section class="lattest-product-area pb-40 category-list">
 					<div class="row">
-						<!-- single product -->
+						<!-- Produk -->
 						<div
 							v-for="shoes in products"
 							:key="shoes.id"
@@ -139,7 +162,7 @@
 										<h6>{{ shoes.name }}</h6>
 										<p class="text-black-50">{{ shoes.brand_name }}</p>
 										<div class="price">
-											<p class="l-through text-right">Rp {{ shoes.price }}</p>
+											<small class="l-through text-right">Rp {{ shoes.price }}</small>
 											<p class="text-right">Rp {{ shoes.promo_price }}</p>
 										</div>
 									</div>
@@ -148,8 +171,9 @@
 						</div>
 					</div>
 				</section>
-				<!-- End Best Seller -->
-				<!-- Start Filter Bar -->
+				<!-- ------ -->
+
+				<!-- pagination -->
 				<div
 					class="filter-bar d-flex flex-wrap align-items-center justify-content-center"
 				>
@@ -157,8 +181,9 @@
 						<a href="#">1</a>
 					</div>
 				</div>
-				<!-- End Filter Bar -->
+				<!-- ---------- -->
 			</div>
+			<!-- ------ -->
 		</div>
 	</div>
 </template>
@@ -171,25 +196,32 @@ export default {
 			products: [],
 			categories: [],
 			brands: [],
+			sizes: [],
+			colors: [],
 			formatIDR: ["price", "final_price", "promo_price"],
-			filter_category: "all",
+			filter_category: [],
+			filter_color: [],
 			filter_brand: [],
+			filter_size: [],
+			filter_name: "",
 		};
 	},
 	created() {
 		this.refresh();
 		this.categories = this.collectCategories;
 		this.brands = this.collectBrands;
+		this.sizes = this.collectSizes;
+		this.colors = this.collectColor;
 	},
 	methods: {
-        // Refresh rendering data
+		// Refresh rendering data
 		refresh() {
 			this.products = this.changeFormatToIDR(shoesJson, this.formatIDR);
-			this.products = this.shuffle(this.products);
+			// this.products = this.shuffle(this.products);
 		},
 
-        // Shuffle Array Data
-        shuffle(data) {
+		// Shuffle Array Data
+		shuffle(data) {
 			var ctr = data.length,
 				temp,
 				index;
@@ -203,8 +235,15 @@ export default {
 			return data;
 		},
 
-        // Change format to IDR -> Not Yet
-        changeFormatToIDR(data, formatIDR) {
+		// Remove duplicate object by property
+		removeDuplicates(data, prop) {
+			return data.filter((obj, pos, arr) => {
+				return arr.map((mapObj) => mapObj[prop]).indexOf(obj[prop]) === pos;
+			});
+		},
+
+		// Change format to IDR -> Not Yet
+		changeFormatToIDR(data, formatIDR) {
 			for (var i in data) {
 				for (var j in formatIDR) {
 					data[i][formatIDR[j]] /= 1;
@@ -218,30 +257,81 @@ export default {
 			return data;
 		},
 
-        // Render Filtered Product
-        filteredProduct() {
+		// Render Filtered Product
+		filteredProduct() {
 			this.refresh();
-			if (this.filter_category != "all") {
-				this.products = this.products.filter(
-					(products) =>
-						Object.values(products.categories).indexOf(this.filter_category) >
-						-1
-				);
+
+			// Name Filter
+			if (this.filter_name != "") {
+				this.products = this.products.filter((product) => {
+					return product.name
+						.toLowerCase()
+						.includes(this.filter_name.toLowerCase());
+				});
 			}
+
+			// Category Filter -> Filter if doesn't know the id of Category
+			if (this.filter_category.length != 0) {
+				var arr_concat = [];
+
+				for (var i in this.filter_category) {
+					var concat = this.products.filter(
+						(products) =>
+							Object.values(products.categories).indexOf(
+								this.filter_category[i]
+							) > -1
+					);
+					arr_concat = arr_concat.concat(concat);
+				}
+				this.products = this.removeDuplicates(arr_concat, "id");
+			}
+
+			// Brand Filter -> concat in case product just have (only one brand)
 			if (this.filter_brand.length != 0) {
-                var arr_concat = [];
+				var arr_concat = [];
 				for (var i in this.filter_brand) {
 					var concat = this.products.filter(
 						(products) => products.brand_name == this.filter_brand[i]
-                    );
-                    arr_concat = arr_concat.concat(concat)
-                }
-                this.products = arr_concat;
+					);
+					arr_concat = arr_concat.concat(concat);
+				}
+				this.products = arr_concat;
 			}
+
+			// Size Filter -> concat with removed duplicate & Nested filter with some
+			if (this.filter_size.length != 0) {
+				var arr_concat = [];
+				for (var i in this.filter_size) {
+					var concat = this.products.filter((product) => {
+						var variants = product.variants.some(({ sizes }) =>
+							sizes.some(({ size }) => size == this.filter_size[i])
+						);
+						return variants;
+					});
+					arr_concat = arr_concat.concat(concat);
+				}
+				this.products = this.removeDuplicates(arr_concat, "id");
+			}
+
+			// Color Filter
+			if (this.filter_color.length != 0) {
+				var arr_concat = [];
+
+				for (var i in this.filter_color) {
+					var concat = this.products.filter((product) =>
+						product.variants.some(
+							({ color_id }) => color_id == this.filter_color[i]
+						)
+                    );
+					arr_concat = arr_concat.concat(concat);
+                }
+				this.products = this.removeDuplicates(arr_concat, "id");
+            }
+
 		},
 	},
 	computed: {
-        // Collect all Unique Categories Name
+		// Collect all Unique Categories Name
 		collectCategories() {
 			var category = [];
 			for (var i in this.products) {
@@ -256,8 +346,8 @@ export default {
 			return category;
 		},
 
-        // Collect all Unique Brands Name
-        collectBrands() {
+		// Collect all Unique Brands Name
+		collectBrands() {
 			var brand = [];
 			for (var i in this.products) {
 				brand.push(this.products[i].brand_name);
@@ -267,6 +357,43 @@ export default {
 			);
 			brand = brand.sort();
 			return brand;
+		},
+
+		// Collect all Unique Size
+		collectSizes() {
+			var size = [];
+			for (var i in this.products) {
+				for (var j in this.products[i].variants) {
+					for (var k in this.products[i].variants[j].sizes) {
+						size.push(this.products[i].variants[j].sizes[k].size);
+					}
+				}
+			}
+			size = size.filter((value, index, self) => self.indexOf(value) === index);
+			size = size.sort();
+			return size;
+		},
+
+		// Collect all Unique Color
+		collectColor() {
+			var color = [];
+			for (var i in this.products) {
+				for (var j in this.products[i].variants) {
+					color.push(this.products[i].variants[j].color);
+				}
+			}
+			color = this.removeDuplicates(color, "name").sort(function (a, b) {
+				const nameA = a.name.toUpperCase();
+				const nameB = b.name.toUpperCase();
+				let comparison = 0;
+				if (nameA > nameB) {
+					comparison = 1;
+				} else if (nameA < nameB) {
+					comparison = -1;
+				}
+				return comparison;
+			});
+			return color;
 		},
 	},
 };

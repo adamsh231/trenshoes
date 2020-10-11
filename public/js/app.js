@@ -2075,6 +2075,31 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2082,21 +2107,27 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       products: [],
       categories: [],
       brands: [],
+      sizes: [],
+      colors: [],
       formatIDR: ["price", "final_price", "promo_price"],
-      filter_category: "all",
-      filter_brand: []
+      filter_category: [],
+      filter_color: [],
+      filter_brand: [],
+      filter_size: [],
+      filter_name: ""
     };
   },
   created: function created() {
     this.refresh();
     this.categories = this.collectCategories;
     this.brands = this.collectBrands;
+    this.sizes = this.collectSizes;
+    this.colors = this.collectColor;
   },
   methods: {
     // Refresh rendering data
     refresh: function refresh() {
-      this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR);
-      this.products = this.shuffle(this.products);
+      this.products = this.changeFormatToIDR(_json_products_json__WEBPACK_IMPORTED_MODULE_0__, this.formatIDR); // this.products = this.shuffle(this.products);
     },
     // Shuffle Array Data
     shuffle: function shuffle(data) {
@@ -2113,6 +2144,14 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       }
 
       return data;
+    },
+    // Remove duplicate object by property
+    removeDuplicates: function removeDuplicates(data, prop) {
+      return data.filter(function (obj, pos, arr) {
+        return arr.map(function (mapObj) {
+          return mapObj[prop];
+        }).indexOf(obj[prop]) === pos;
+      });
     },
     // Change format to IDR -> Not Yet
     changeFormatToIDR: function changeFormatToIDR(data, formatIDR) {
@@ -2131,13 +2170,28 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
     filteredProduct: function filteredProduct() {
       var _this = this;
 
-      this.refresh();
+      this.refresh(); // Name Filter
 
-      if (this.filter_category != "all") {
-        this.products = this.products.filter(function (products) {
-          return Object.values(products.categories).indexOf(_this.filter_category) > -1;
+      if (this.filter_name != "") {
+        this.products = this.products.filter(function (product) {
+          return product.name.toLowerCase().includes(_this.filter_name.toLowerCase());
         });
-      }
+      } // Category Filter -> Filter if doesn't know the id of Category
+
+
+      if (this.filter_category.length != 0) {
+        var arr_concat = [];
+
+        for (var i in this.filter_category) {
+          var concat = this.products.filter(function (products) {
+            return Object.values(products.categories).indexOf(_this.filter_category[i]) > -1;
+          });
+          arr_concat = arr_concat.concat(concat);
+        }
+
+        this.products = this.removeDuplicates(arr_concat, "id");
+      } // Brand Filter -> concat in case product just have (only one brand)
+
 
       if (this.filter_brand.length != 0) {
         var arr_concat = [];
@@ -2150,6 +2204,44 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
         }
 
         this.products = arr_concat;
+      } // Size Filter -> concat with removed duplicate & Nested filter with some
+
+
+      if (this.filter_size.length != 0) {
+        var arr_concat = [];
+
+        for (var i in this.filter_size) {
+          var concat = this.products.filter(function (product) {
+            var variants = product.variants.some(function (_ref) {
+              var sizes = _ref.sizes;
+              return sizes.some(function (_ref2) {
+                var size = _ref2.size;
+                return size == _this.filter_size[i];
+              });
+            });
+            return variants;
+          });
+          arr_concat = arr_concat.concat(concat);
+        }
+
+        this.products = this.removeDuplicates(arr_concat, "id");
+      } // Color Filter
+
+
+      if (this.filter_color.length != 0) {
+        var arr_concat = [];
+
+        for (var i in this.filter_color) {
+          var concat = this.products.filter(function (product) {
+            return product.variants.some(function (_ref3) {
+              var color_id = _ref3.color_id;
+              return color_id == _this.filter_color[i];
+            });
+          });
+          arr_concat = arr_concat.concat(concat);
+        }
+
+        this.products = this.removeDuplicates(arr_concat, "id");
       }
     }
   },
@@ -2183,6 +2275,49 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
       });
       brand = brand.sort();
       return brand;
+    },
+    // Collect all Unique Size
+    collectSizes: function collectSizes() {
+      var size = [];
+
+      for (var i in this.products) {
+        for (var j in this.products[i].variants) {
+          for (var k in this.products[i].variants[j].sizes) {
+            size.push(this.products[i].variants[j].sizes[k].size);
+          }
+        }
+      }
+
+      size = size.filter(function (value, index, self) {
+        return self.indexOf(value) === index;
+      });
+      size = size.sort();
+      return size;
+    },
+    // Collect all Unique Color
+    collectColor: function collectColor() {
+      var color = [];
+
+      for (var i in this.products) {
+        for (var j in this.products[i].variants) {
+          color.push(this.products[i].variants[j].color);
+        }
+      }
+
+      color = this.removeDuplicates(color, "name").sort(function (a, b) {
+        var nameA = a.name.toUpperCase();
+        var nameB = b.name.toUpperCase();
+        var comparison = 0;
+
+        if (nameA > nameB) {
+          comparison = 1;
+        } else if (nameA < nameB) {
+          comparison = -1;
+        }
+
+        return comparison;
+      });
+      return color;
     }
   }
 });
@@ -2200,6 +2335,13 @@ var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _json_products_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../json/products.json */ "./resources/js/components/json/products.json");
 var _json_products_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../json/products.json */ "./resources/js/components/json/products.json", 1);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -20007,44 +20149,10 @@ var render = function() {
           _c("div", { staticClass: "common-filter" }, [
             _c("div", { staticClass: "head" }, [_vm._v("Kategori")]),
             _vm._v(" "),
-            _c("form", { attrs: { action: "#" } }, [
-              _c(
-                "ul",
-                [
-                  _c("li", { staticClass: "filter-list" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.filter_category,
-                          expression: "filter_category"
-                        }
-                      ],
-                      staticClass: "pixel-radio",
-                      attrs: {
-                        type: "radio",
-                        id: "all",
-                        name: "brand",
-                        value: "all"
-                      },
-                      domProps: { checked: _vm._q(_vm.filter_category, "all") },
-                      on: {
-                        change: [
-                          function($event) {
-                            _vm.filter_category = "all"
-                          },
-                          function($event) {
-                            return _vm.filteredProduct()
-                          }
-                        ]
-                      }
-                    }),
-                    _c("label", { attrs: { for: "all" } }, [
-                      _vm._v("Semua Kategori")
-                    ])
-                  ]),
-                  _vm._v(" "),
+            _c("div", { staticStyle: { overflow: "auto", height: "200px" } }, [
+              _c("form", { attrs: { action: "#" } }, [
+                _c(
+                  "ul",
                   _vm._l(_vm.categories, function(category) {
                     return _c(
                       "li",
@@ -20060,15 +20168,38 @@ var render = function() {
                             }
                           ],
                           staticClass: "pixel-radio",
-                          attrs: { type: "radio", id: category, name: "brand" },
+                          attrs: {
+                            type: "checkbox",
+                            id: category,
+                            name: "category"
+                          },
                           domProps: {
                             value: category,
-                            checked: _vm._q(_vm.filter_category, category)
+                            checked: Array.isArray(_vm.filter_category)
+                              ? _vm._i(_vm.filter_category, category) > -1
+                              : _vm.filter_category
                           },
                           on: {
                             change: [
                               function($event) {
-                                _vm.filter_category = category
+                                var $$a = _vm.filter_category,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = category,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.filter_category = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.filter_category = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.filter_category = $$c
+                                }
                               },
                               function($event) {
                                 return _vm.filteredProduct()
@@ -20081,83 +20212,273 @@ var render = function() {
                         ])
                       ]
                     )
-                  })
-                ],
-                2
-              )
+                  }),
+                  0
+                )
+              ])
             ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "common-filter" }, [
-            _c("div", { staticClass: "head" }, [_vm._v("Brands")]),
+            _c("div", { staticClass: "head" }, [_vm._v("Merek")]),
             _vm._v(" "),
-            _c("form", { attrs: { action: "#" } }, [
-              _c(
-                "ul",
-                _vm._l(_vm.brands, function(brand) {
-                  return _c("li", { key: brand, staticClass: "filter-list" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.filter_brand,
-                          expression: "filter_brand"
-                        }
-                      ],
-                      staticClass: "pixel-radio",
-                      attrs: { type: "checkbox", id: brand },
-                      domProps: {
-                        value: brand,
-                        checked: Array.isArray(_vm.filter_brand)
-                          ? _vm._i(_vm.filter_brand, brand) > -1
-                          : _vm.filter_brand
-                      },
-                      on: {
-                        change: [
-                          function($event) {
-                            var $$a = _vm.filter_brand,
-                              $$el = $event.target,
-                              $$c = $$el.checked ? true : false
-                            if (Array.isArray($$a)) {
-                              var $$v = brand,
-                                $$i = _vm._i($$a, $$v)
-                              if ($$el.checked) {
-                                $$i < 0 &&
-                                  (_vm.filter_brand = $$a.concat([$$v]))
-                              } else {
-                                $$i > -1 &&
-                                  (_vm.filter_brand = $$a
-                                    .slice(0, $$i)
-                                    .concat($$a.slice($$i + 1)))
-                              }
-                            } else {
-                              _vm.filter_brand = $$c
+            _c("div", { staticStyle: { overflow: "auto", height: "200px" } }, [
+              _c("form", { attrs: { action: "#" } }, [
+                _c(
+                  "ul",
+                  _vm._l(_vm.brands, function(brand) {
+                    return _c(
+                      "li",
+                      { key: brand, staticClass: "filter-list" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter_brand,
+                              expression: "filter_brand"
                             }
+                          ],
+                          staticClass: "pixel-radio",
+                          attrs: { type: "checkbox", id: brand },
+                          domProps: {
+                            value: brand,
+                            checked: Array.isArray(_vm.filter_brand)
+                              ? _vm._i(_vm.filter_brand, brand) > -1
+                              : _vm.filter_brand
                           },
-                          function($event) {
-                            return _vm.filteredProduct()
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$a = _vm.filter_brand,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = brand,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.filter_brand = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.filter_brand = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.filter_brand = $$c
+                                }
+                              },
+                              function($event) {
+                                return _vm.filteredProduct()
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    }),
-                    _c("label", { attrs: { for: brand } }, [
-                      _vm._v(_vm._s(brand))
-                    ])
-                  ])
-                }),
-                0
-              )
+                        }),
+                        _c("label", { attrs: { for: brand } }, [
+                          _vm._v(_vm._s(brand))
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
             ])
           ]),
           _vm._v(" "),
-          _vm._m(0),
+          _c("div", { staticClass: "common-filter" }, [
+            _c("div", { staticClass: "head" }, [_vm._v("Ukuran")]),
+            _vm._v(" "),
+            _c("div", { staticStyle: { overflow: "auto", height: "200px" } }, [
+              _c("form", { attrs: { action: "#" } }, [
+                _c(
+                  "ul",
+                  _vm._l(_vm.sizes, function(size) {
+                    return _c("li", { key: size, staticClass: "filter-list" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.filter_size,
+                            expression: "filter_size"
+                          }
+                        ],
+                        staticClass: "pixel-radio",
+                        attrs: { type: "checkbox", id: size },
+                        domProps: {
+                          value: size,
+                          checked: Array.isArray(_vm.filter_size)
+                            ? _vm._i(_vm.filter_size, size) > -1
+                            : _vm.filter_size
+                        },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$a = _vm.filter_size,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = size,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    (_vm.filter_size = $$a.concat([$$v]))
+                                } else {
+                                  $$i > -1 &&
+                                    (_vm.filter_size = $$a
+                                      .slice(0, $$i)
+                                      .concat($$a.slice($$i + 1)))
+                                }
+                              } else {
+                                _vm.filter_size = $$c
+                              }
+                            },
+                            function($event) {
+                              return _vm.filteredProduct()
+                            }
+                          ]
+                        }
+                      }),
+                      _c("label", { attrs: { for: size } }, [
+                        _vm._v(_vm._s(size))
+                      ])
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ])
+          ]),
           _vm._v(" "),
-          _vm._m(1)
+          _c("div", { staticClass: "common-filter" }, [
+            _c("div", { staticClass: "head" }, [_vm._v("Warna")]),
+            _vm._v(" "),
+            _c("div", { staticStyle: { overflow: "auto", height: "200px" } }, [
+              _c("form", { attrs: { action: "#" } }, [
+                _c(
+                  "ul",
+                  _vm._l(_vm.colors, function(color) {
+                    return _c(
+                      "li",
+                      { key: color.id, staticClass: "filter-list" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter_color,
+                              expression: "filter_color"
+                            }
+                          ],
+                          staticClass: "pixel-radio",
+                          attrs: {
+                            type: "checkbox",
+                            id: color.id,
+                            name: "color"
+                          },
+                          domProps: {
+                            value: color.id,
+                            checked: Array.isArray(_vm.filter_color)
+                              ? _vm._i(_vm.filter_color, color.id) > -1
+                              : _vm.filter_color
+                          },
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$a = _vm.filter_color,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = color.id,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.filter_color = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.filter_color = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.filter_color = $$c
+                                }
+                              },
+                              function($event) {
+                                return _vm.filteredProduct()
+                              }
+                            ]
+                          }
+                        }),
+                        _c("label", { attrs: { for: color.id } }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass: "btn-sm btn-outline-light",
+                              style:
+                                "background-color:" +
+                                color.rgb +
+                                "; border-radius: 15px; border: 1px solid black"
+                            },
+                            [_vm._v(_vm._s(color.name))]
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-xl-9 col-lg-8 col-md-7" }, [
+        _c(
+          "div",
+          { staticClass: "input-group", staticStyle: { "margin-top": "50px" } },
+          [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.filter_name,
+                  expression: "filter_name"
+                }
+              ],
+              staticClass: "form-control text-center",
+              attrs: {
+                type: "text",
+                placeholder: "Cari Nama Produk",
+                onfocus: "this.placeholder = ''",
+                onblur: "this.placeholder = 'Cari Nama Produk'"
+              },
+              domProps: { value: _vm.filter_name },
+              on: {
+                input: [
+                  function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.filter_name = $event.target.value
+                  },
+                  function($event) {
+                    return _vm.filteredProduct()
+                  }
+                ]
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
         _c(
           "section",
           { staticClass: "lattest-product-area pb-40 category-list" },
@@ -20185,9 +20506,11 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("div", { staticClass: "price" }, [
-                            _c("p", { staticClass: "l-through text-right" }, [
-                              _vm._v("Rp " + _vm._s(shoes.price))
-                            ]),
+                            _c(
+                              "small",
+                              { staticClass: "l-through text-right" },
+                              [_vm._v("Rp " + _vm._s(shoes.price))]
+                            ),
                             _vm._v(" "),
                             _c("p", { staticClass: "text-right" }, [
                               _vm._v("Rp " + _vm._s(shoes.promo_price))
@@ -20204,79 +20527,12 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(2)
+        _vm._m(1)
       ])
     ])
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "common-filter" }, [
-      _c("div", { staticClass: "head" }, [_vm._v("Color")]),
-      _vm._v(" "),
-      _c("form", { attrs: { action: "#" } }, [
-        _c("ul", [
-          _c("li", { staticClass: "filter-list" }, [
-            _c("input", {
-              staticClass: "pixel-radio",
-              attrs: { type: "radio", id: "black", name: "color" }
-            }),
-            _c("label", { attrs: { for: "black" } }, [
-              _vm._v("Black"),
-              _c("span", [_vm._v("(29)")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "filter-list" }, [
-            _c("input", {
-              staticClass: "pixel-radio",
-              attrs: { type: "radio", id: "balckleather", name: "color" }
-            }),
-            _c("label", { attrs: { for: "balckleather" } }, [
-              _vm._v("Black Leather"),
-              _c("span", [_vm._v("(29)")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "filter-list" }, [
-            _c("input", {
-              staticClass: "pixel-radio",
-              attrs: { type: "radio", id: "blackred", name: "color" }
-            }),
-            _c("label", { attrs: { for: "blackred" } }, [
-              _vm._v("Black with red"),
-              _c("span", [_vm._v("(19)")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "filter-list" }, [
-            _c("input", {
-              staticClass: "pixel-radio",
-              attrs: { type: "radio", id: "gold", name: "color" }
-            }),
-            _c("label", { attrs: { for: "gold" } }, [
-              _vm._v("Gold"),
-              _c("span", [_vm._v("(19)")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "filter-list" }, [
-            _c("input", {
-              staticClass: "pixel-radio",
-              attrs: { type: "radio", id: "spacegrey", name: "color" }
-            }),
-            _c("label", { attrs: { for: "spacegrey" } }, [
-              _vm._v("Spacegrey"),
-              _c("span", [_vm._v("(19)")])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

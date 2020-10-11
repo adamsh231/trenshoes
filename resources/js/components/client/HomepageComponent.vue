@@ -2,7 +2,7 @@
 	<div class="container mt-4">
 
 		<hr />
-		<!-- single product slide -->
+		<!-- Produk Terlaris -->
 		<div class="single-product-slider">
 			<div class="container">
 				<div class="row justify-content-center">
@@ -13,7 +13,8 @@
 					</div>
 				</div>
 				<div class="row justify-content-center">
-					<!-- single product -->
+
+					<!-- Produk -->
 					<div
 						v-for="shoes in heroProducts"
 						v-bind:key="shoes.id"
@@ -33,12 +34,15 @@
 							</div>
 						</a>
 					</div>
+                    <!-- ------ -->
+
 				</div>
 			</div>
 		</div>
+        <!-- --------------- -->
 
 		<hr />
-		<!-- single product slide -->
+		<!-- Produk Terbaru -->
 		<div class="single-product-slider">
 			<div class="container">
 				<div class="row justify-content-center">
@@ -49,7 +53,8 @@
 					</div>
 				</div>
 				<div class="row justify-content-center">
-					<!-- single product -->
+
+					<!-- Produk -->
 					<div
 						v-for="shoes in newProducts"
 						:key="shoes.id"
@@ -69,6 +74,8 @@
 							</div>
 						</a>
 					</div>
+                    <!-- ------ -->
+
 				</div>
 			</div>
 		</div>
