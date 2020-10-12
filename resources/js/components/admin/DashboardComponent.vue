@@ -145,7 +145,7 @@ export default {
 				.then(function (response) {
 					$("#button_edit_product").prop("disabled", false);
 					$("#modal_edit_product").modal("hide");
-					Swal.fire("Success!", "Data has been added!", "success");
+					Swal.fire("Success!", "Data has been edited!", "success");
 					vm.fetchProduct();
 				})
 				.catch(function (error) {
