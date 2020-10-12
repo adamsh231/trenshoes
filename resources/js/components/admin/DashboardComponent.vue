@@ -23,18 +23,28 @@
 					>
 						<thead>
 							<tr>
-								<th>Nama</th>
-								<th>Merek</th>
-								<th>Harga</th>
-								<th>Harga Promo</th>
+								<th class="text-center">Nama</th>
+								<th class="text-center">Merek</th>
+								<th class="text-center">Harga</th>
+								<th class="text-center">Harga Promo</th>
+								<th class="text-center">Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr v-for="product in products" :key="product.id">
 								<td>{{ product.name }}</td>
 								<td>{{ product.brand.name }}</td>
-								<td>{{ product.price }}</td>
-								<td>{{ product.promo_price }}</td>
+								<td class="text-center">{{ product.price }}</td>
+								<td class="text-center">{{ product.promo_price }}</td>
+								<td class="text-center">
+									<a
+										@click="deleteProduct(product.id)"
+										:id="'product' + product.id"
+										class="btn btn-danger btn-circle btn-sm text-white"
+									>
+										<i class="fas fa-trash"></i>
+									</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -69,8 +79,8 @@ export default {
 				});
 		},
 		addProduct() {
-            $("#button_add_product").prop("disabled", true);
-            const vm = this;
+			$("#button_add_product").prop("disabled", true);
+			const vm = this;
 			axios
 				.post("/admin/product", {
 					name: $("#input_name").val(),
@@ -89,7 +99,22 @@ export default {
 						"Failed!",
 						"Incomplete data or Inconsistent Connection!",
 						"error"
-                    );
+					);
+				});
+		},
+		deleteProduct(id) {
+			$("#product" + id).addClass("disabled");
+			const vm = this;
+			axios
+				.post("/admin/product/" + id)
+				.then((response) => {
+					Swal.fire("Success!", "Data has been deleted!", "success");
+					vm.fetchProduct();
+				})
+				.catch((error) => {
+					$("#button_add_product").prop("disabled", false);
+					Swal.fire("Failed!", "Inconsistent Connection!", "error");
+					$("#product" + id).removeClass("disabled");
 				});
 		},
 	},

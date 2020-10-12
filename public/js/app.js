@@ -1954,6 +1954,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1991,6 +2001,18 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         $("#button_add_product").prop("disabled", false);
         Swal.fire("Failed!", "Incomplete data or Inconsistent Connection!", "error");
+      });
+    },
+    deleteProduct: function deleteProduct(id) {
+      $("#product" + id).addClass("disabled");
+      var vm = this;
+      axios.post("/admin/product/" + id).then(function (response) {
+        Swal.fire("Success!", "Data has been deleted!", "success");
+        vm.fetchProduct();
+      })["catch"](function (error) {
+        $("#button_add_product").prop("disabled", false);
+        Swal.fire("Failed!", "Inconsistent Connection!", "error");
+        $("#product" + id).removeClass("disabled");
       });
     }
   }
@@ -20776,9 +20798,30 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(product.brand.name))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(product.price))]),
+                    _c("td", { staticClass: "text-center" }, [
+                      _vm._v(_vm._s(product.price))
+                    ]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(product.promo_price))])
+                    _c("td", { staticClass: "text-center" }, [
+                      _vm._v(_vm._s(product.promo_price))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "btn btn-danger btn-circle btn-sm text-white",
+                          attrs: { id: "product" + product.id },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteProduct(product.id)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-trash" })]
+                      )
+                    ])
                   ])
                 }),
                 0
@@ -20818,13 +20861,15 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Nama")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Nama")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Merek")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Merek")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Harga")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Harga")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Harga Promo")])
+        _c("th", { staticClass: "text-center" }, [_vm._v("Harga Promo")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Action")])
       ])
     ])
   }

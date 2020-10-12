@@ -35,4 +35,5 @@ Route::get('/admin', function () {
 
 Route::get('/admin/product', [MainController::class, 'getProduct']);
 Route::post('/admin/product', [MainController::class, 'addProduct']);
+Route::post('/admin/product/{product}', [MainController::class, 'deleteProduct']);
 // ------------------------------------------------------//

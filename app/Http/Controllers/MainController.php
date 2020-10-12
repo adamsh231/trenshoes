@@ -42,4 +42,11 @@ class MainController extends Controller
             'error' => false,
         ], 200);
     }
+
+    public function deleteProduct(Product $product){
+        $product->delete();
+        return response()->json([
+            'error' => false,
+        ], 200);
+    }
 }
