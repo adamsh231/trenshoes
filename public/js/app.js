@@ -1964,6 +1964,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1975,6 +1982,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     $("#button_add_product").click(this.addProduct);
+    $("#button_edit_product").click(this.editProduct);
   },
   methods: {
     fetchProduct: function fetchProduct() {
@@ -1990,9 +1998,9 @@ __webpack_require__.r(__webpack_exports__);
       $("#button_add_product").prop("disabled", true);
       var vm = this;
       axios.post("/admin/product", {
-        name: $("#input_name").val(),
-        brand: $("#input_brand").val(),
-        price: $("#input_price").val()
+        name: $("#input_name_add").val(),
+        brand: $("#input_brand_add").val(),
+        price: $("#input_price_add").val()
       }).then(function (response) {
         $("#button_add_product").prop("disabled", false);
         $("#modal_add_product").modal("hide");
@@ -2004,7 +2012,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deleteProduct: function deleteProduct(id) {
-      $("#product" + id).addClass("disabled");
+      $("#delete" + id).addClass("disabled");
       var vm = this;
       axios.post("/admin/product/" + id).then(function (response) {
         Swal.fire("Success!", "Data has been deleted!", "success");
@@ -2013,6 +2021,31 @@ __webpack_require__.r(__webpack_exports__);
         $("#button_add_product").prop("disabled", false);
         Swal.fire("Failed!", "Inconsistent Connection!", "error");
         $("#product" + id).removeClass("disabled");
+      });
+    },
+    fillEditProduct: function fillEditProduct(index) {
+      $('#modal_edit_product').modal('show');
+      $("#input_name_edit").val(this.products[index].name);
+      $("#input_brand_edit").val(this.products[index].brand.id);
+      $("#input_price_edit").val(this.products[index].price);
+      $("#input_id_edit").val(this.products[index].id);
+    },
+    editProduct: function editProduct() {
+      var id = $("#input_id_edit").val();
+      $("#button_edit_product").prop("disabled", true);
+      var vm = this;
+      axios.post("/admin/product/" + id + "/edit", {
+        name: $("#input_name_edit").val(),
+        brand: $("#input_brand_edit").val(),
+        price: $("#input_price_edit").val()
+      }).then(function (response) {
+        $("#button_edit_product").prop("disabled", false);
+        $("#modal_edit_product").modal("hide");
+        Swal.fire("Success!", "Data has been added!", "success");
+        vm.fetchProduct();
+      })["catch"](function (error) {
+        $("#button_edit_product").prop("disabled", false);
+        Swal.fire("Failed!", "Incomplete data or Inconsistent Connection!", "error");
       });
     }
   }
@@ -20792,7 +20825,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.products, function(product) {
+                _vm._l(_vm.products, function(product, index) {
                   return _c("tr", { key: product.id }, [
                     _c("td", [_vm._v(_vm._s(product.name))]),
                     _vm._v(" "),
@@ -20811,8 +20844,23 @@ var render = function() {
                         "a",
                         {
                           staticClass:
+                            "btn btn-primary btn-circle btn-sm text-white",
+                          attrs: { id: "edit" + product.id },
+                          on: {
+                            click: function($event) {
+                              return _vm.fillEditProduct(index)
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-edit" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass:
                             "btn btn-danger btn-circle btn-sm text-white",
-                          attrs: { id: "product" + product.id },
+                          attrs: { id: "delete" + product.id },
                           on: {
                             click: function($event) {
                               return _vm.deleteProduct(product.id)

@@ -31,15 +31,22 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="product in products" :key="product.id">
+							<tr v-for="(product, index) in products" :key="product.id">
 								<td>{{ product.name }}</td>
 								<td>{{ product.brand.name }}</td>
 								<td class="text-center">{{ product.price }}</td>
 								<td class="text-center">{{ product.promo_price }}</td>
 								<td class="text-center">
 									<a
+										@click="fillEditProduct(index)"
+										:id="'edit' + product.id"
+										class="btn btn-primary btn-circle btn-sm text-white"
+									>
+										<i class="fas fa-edit"></i>
+									</a>
+									<a
 										@click="deleteProduct(product.id)"
-										:id="'product' + product.id"
+										:id="'delete' + product.id"
 										class="btn btn-danger btn-circle btn-sm text-white"
 									>
 										<i class="fas fa-trash"></i>
@@ -66,6 +73,7 @@ export default {
 	},
 	mounted() {
 		$("#button_add_product").click(this.addProduct);
+		$("#button_edit_product").click(this.editProduct);
 	},
 	methods: {
 		fetchProduct() {
@@ -83,9 +91,9 @@ export default {
 			const vm = this;
 			axios
 				.post("/admin/product", {
-					name: $("#input_name").val(),
-					brand: $("#input_brand").val(),
-					price: $("#input_price").val(),
+					name: $("#input_name_add").val(),
+					brand: $("#input_brand_add").val(),
+					price: $("#input_price_add").val(),
 				})
 				.then(function (response) {
 					$("#button_add_product").prop("disabled", false);
@@ -103,7 +111,7 @@ export default {
 				});
 		},
 		deleteProduct(id) {
-			$("#product" + id).addClass("disabled");
+			$("#delete" + id).addClass("disabled");
 			const vm = this;
 			axios
 				.post("/admin/product/" + id)
@@ -117,6 +125,38 @@ export default {
 					$("#product" + id).removeClass("disabled");
 				});
 		},
+		fillEditProduct(index) {
+            $('#modal_edit_product').modal('show');
+			$("#input_name_edit").val(this.products[index].name);
+			$("#input_brand_edit").val(this.products[index].brand.id);
+			$("#input_price_edit").val(this.products[index].price);
+			$("#input_id_edit").val(this.products[index].id);
+        },
+        editProduct(){
+			var id = $("#input_id_edit").val();
+            $("#button_edit_product").prop("disabled", true);
+			const vm = this;
+			axios
+				.post("/admin/product/"+id+"/edit", {
+					name: $("#input_name_edit").val(),
+					brand: $("#input_brand_edit").val(),
+					price: $("#input_price_edit").val(),
+				})
+				.then(function (response) {
+					$("#button_edit_product").prop("disabled", false);
+					$("#modal_edit_product").modal("hide");
+					Swal.fire("Success!", "Data has been added!", "success");
+					vm.fetchProduct();
+				})
+				.catch(function (error) {
+					$("#button_edit_product").prop("disabled", false);
+					Swal.fire(
+						"Failed!",
+						"Incomplete data or Inconsistent Connection!",
+						"error"
+					);
+				});
+        }
 	},
 };
 </script>

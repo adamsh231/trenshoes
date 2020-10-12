@@ -43,6 +43,34 @@ class MainController extends Controller
         ], 200);
     }
 
+    public function editProduct(Request $request,Product $product)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required'],
+                'price' => ['required', 'numeric'],
+                'brand' => ['required'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error'    => true,
+                'messages' => $validator->errors(),
+            ], 422);
+        }
+
+        $product->name = $request->name;
+        $product->brand_id = $request->brand;
+        $product->price = $request->price;
+        $product->save();
+
+        return response()->json([
+            'error' => false,
+        ], 200);
+    }
+
     public function deleteProduct(Product $product){
         $product->delete();
         return response()->json([
