@@ -8,6 +8,10 @@ Vue.component('catalogue-component', require('./components/client/CatalogueCompo
 Vue.component('product-component', require('./components/client/ProductComponent.vue').default);
 // ------------------------------------------------------//
 
+// -------------------- Admin Side ----------------------//
+Vue.component('dashboard-component', require('./components/admin/DashboardComponent.vue').default);
+// ------------------------------------------------------//
+
 const app = new Vue({
     el: '#app',
 });

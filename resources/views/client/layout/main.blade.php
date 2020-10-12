@@ -50,6 +50,7 @@
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <li class="nav-item @yield('home')"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
                             <li class="nav-item @yield('catalogue')"><a class="nav-link" href="{{ url('/catalogue') }}">Katalog</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/admin') }}">Admin</a></li>
                             {{-- <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
                                 <ul class="dropdown-menu">

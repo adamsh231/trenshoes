@@ -18,6 +18,8 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('sbadmin/css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    @yield('add_style')
+
 </head>
 
 <body id="page-top">
@@ -29,7 +31,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/admin') }}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -41,9 +43,14 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ url('/admin') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url('/') }}">
+                    <i class="fas fa-fw fa-shopping-cart"></i>
+                    <span>Katalog</span></a>
             </li>
 
         </ul>
@@ -107,12 +114,10 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{ asset('sbadmin/vendor/chart.js/Chart.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('sbadmin/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('sbadmin/js/demo/chart-pie-demo.js') }}"></script>
+    @yield('add_script')
+
 
 </body>
 

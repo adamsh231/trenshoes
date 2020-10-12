@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
+use App\Models\Brand;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,10 @@ Route::get('/product/{id}', function () {
 
 // -------------------- Admin Side ----------------------//
 Route::get('/admin', function () {
-    return view('admin.dashboard');
+    $brands = Brand::all();
+    return view('admin.dashboard', ['brands' => $brands]);
 });
+
+Route::get('/admin/product', [MainController::class, 'getProduct']);
+Route::post('/admin/product', [MainController::class, 'addProduct']);
 // ------------------------------------------------------//
